@@ -1,4 +1,4 @@
-import type { UserTask } from "../redux/slices/UserTaskSlice";
+import type { NewUserTask, UserTask } from "../redux/slices/UserTaskSlice";
 
 export const getUserTasks = async (): Promise<UserTask[]> => {
     
@@ -21,5 +21,17 @@ export const getUserTasks = async (): Promise<UserTask[]> => {
             Due: new Date().toString()
         }
     ]
+
+}
+
+export const createUserTask = async (newUserTask: NewUserTask): Promise<UserTask> => {
+
+    await new Promise(resolve => setTimeout(resolve, 5000));
+    console.log("Delayed for 5 seconds");
+
+    return {
+        Id: 2,
+        ...newUserTask
+    }
 
 }

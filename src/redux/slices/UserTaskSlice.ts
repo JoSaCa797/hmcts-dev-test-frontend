@@ -1,9 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAppAsyncThunk } from "../thunk";
-import { getUserTasks } from "../../util/testApi";
+import { createUserTask, getUserTasks } from "../../util/testApi";
 
 export interface UserTask {
     Id: number;
+    Title: string;
+    Description: string | null;
+    Status: boolean;
+    Due: string;
+}
+
+export interface NewUserTask {
     Title: string;
     Description: string | null;
     Status: boolean;
@@ -31,6 +38,13 @@ export const fetchUserTasks = createAppAsyncThunk('userTasks/FetchUserTasks',
     }
 )
 
+export const postUserTask = createAppAsyncThunk('userTasks/PostUserTask',
+    async (userTaskPost: NewUserTask) => {
+        const response = await createUserTask(userTaskPost);
+        return response;
+    },
+)
+
 const initialState: UserTaskState = {
     UserTasks: [],
     status: "idle",
@@ -55,6 +69,9 @@ const UserTaskSlice = createSlice({
             .addCase(fetchUserTasks.rejected, (state, action) => {
                 state.status = "failed";
                 state.error = action.error.message ?? "Unknown Error";
+            })
+            .addCase(postUserTask.fulfilled, (state, action) => {
+                state.UserTasks.push(action.payload);
             })
     }
 });
