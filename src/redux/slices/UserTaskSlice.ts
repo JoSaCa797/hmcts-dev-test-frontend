@@ -1,6 +1,7 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 interface UserTask {
+    Id: number;
     Title: string;
     Description: string | null;
     Status: boolean;
@@ -9,6 +10,7 @@ interface UserTask {
 
 const initialState: UserTask[] = [
     {
+        Id: 0,
         Title: "Test1",
         Description: "Test2",
         Status: false,
