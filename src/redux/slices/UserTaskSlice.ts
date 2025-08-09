@@ -1,33 +1,64 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+import { createAppAsyncThunk } from "../thunk";
+import { getUserTasks } from "../../util/testApi";
 
-interface UserTask {
+export interface UserTask {
     Id: number;
     Title: string;
     Description: string | null;
     Status: boolean;
-    Due: Date
+    Due: string;
 }
 
-const initialState: UserTask[] = [
+interface UserTaskState {
+    UserTasks: UserTask[],
+    status: 'idle' | 'pending' | 'succeeded' | 'failed'
+    error: string | null
+}
+
+export const fetchUserTasks = createAppAsyncThunk('userTasks/FetchUserTasks', 
+    async () => {
+        const response = await getUserTasks();
+        return response;
+    },
     {
-        Id: 0,
-        Title: "Test1",
-        Description: "Test2",
-        Status: false,
-        Due: new Date()
+        condition(arg, thunkApi) {
+            const userTaskStatus = thunkApi.getState().userTasks.status;
+            if(userTaskStatus !== 'idle'){
+                return false;
+            }
+        }
     }
-];
+)
+
+const initialState: UserTaskState = {
+    UserTasks: [],
+    status: "idle",
+    error: null
+};
 
 const UserTaskSlice = createSlice({
     name: "UserTask",
     initialState: initialState,
     reducers: {
-        updateUserTasks: (_, action: PayloadAction<UserTask[]>) => {
-            return action.payload;
-        }
+        
+    },
+    extraReducers: builder => {
+        builder
+            .addCase(fetchUserTasks.pending, (state, action) => {
+                state.status = "pending";
+            })
+            .addCase(fetchUserTasks.fulfilled, (state, action) => {
+                state.status = "succeeded";
+                state.UserTasks.push(...action.payload);
+            })
+            .addCase(fetchUserTasks.rejected, (state, action) => {
+                state.status = "failed";
+                state.error = action.error.message ?? "Unknown Error";
+            })
     }
 });
 
-export const { updateUserTasks } = UserTaskSlice.actions;
+export const {  } = UserTaskSlice.actions;
 export default UserTaskSlice.reducer;
 
