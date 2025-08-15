@@ -1,4 +1,4 @@
-import { createSlice, current } from "@reduxjs/toolkit";
+import { createSlice, current, isAnyOf } from "@reduxjs/toolkit";
 import { createAppAsyncThunk } from "../thunk";
 import { createTask, deleteTask, getTaskById, getTasks, updateTaskStatus } from "../../util/testApi";
 
@@ -87,27 +87,13 @@ const UserTaskSlice = createSlice({
     },
     extraReducers: builder => {
         builder
-            .addCase(fetchUserTasks.pending, (state, action) => {
-                state.status = "pending";
-            })
             .addCase(fetchUserTasks.fulfilled, (state, action) => {
                 state.status = "idle";
                 state.UserTasks.push(...action.payload);
             })
-            .addCase(fetchUserTasks.rejected, (state, action) => {
-                state.status = "failed";
-                state.error = action.error.message ?? "Unknown Error";
-            })
-            .addCase(fetchUserTask.pending, (state, action) => {
-                state.status = "pending";
-            })
             .addCase(fetchUserTask.fulfilled, (state, action) => {
                 state.status = "idle";
                 state.UserTasks = [action.payload];
-            })
-            .addCase(fetchUserTask.rejected, (state, action) => {
-                state.status = "failed";
-                state.error = action.error.message ?? "Unknown Error";
             })
             .addCase(postUserTask.fulfilled, (state, action) => {
                 state.status = "idle";
@@ -123,6 +109,19 @@ const UserTaskSlice = createSlice({
                 state.status = "idle";
                 state.UserTasks[updatedTaskIndex] = action.payload;
             })
+            .addMatcher(
+                isAnyOf(fetchUserTasks.rejected, fetchUserTask.rejected, postUserTask.rejected, deleteUserTask.rejected, updateUserTaskStatus.rejected),
+                (state, action) => {
+                    state.status = "failed"
+                    state.error = action.error.message ?? "Unknown Error";
+                }
+            )
+            .addMatcher(
+                isAnyOf(fetchUserTasks.pending, fetchUserTask.pending),
+                (state) => {
+                    state.status = "idle"
+                }
+            )
     }
 });
 
