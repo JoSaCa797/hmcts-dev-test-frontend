@@ -1,6 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
 import { createAppAsyncThunk } from "../thunk";
-import { createUserTask, getUserTasks } from "../../util/testApi";
+import { createTask, deleteTask, getTasks, updateTaskStatus } from "../../util/testApi";
 
 export interface UserTask {
     Id: number;
@@ -25,7 +25,7 @@ interface UserTaskState {
 
 export const fetchUserTasks = createAppAsyncThunk('userTasks/FetchUserTasks', 
     async () => {
-        const response = await getUserTasks();
+        const response = await getTasks();
         return response;
     },
     {
@@ -40,8 +40,20 @@ export const fetchUserTasks = createAppAsyncThunk('userTasks/FetchUserTasks',
 
 export const postUserTask = createAppAsyncThunk('userTasks/PostUserTask',
     async (userTaskPost: NewUserTask) => {
-        const response = await createUserTask(userTaskPost);
+        const response = await createTask(userTaskPost);
         return response;
+    },
+)
+
+export const deleteUserTask = createAppAsyncThunk('userTasks/DeleteUserTask',
+    async (id: number) => {
+        return await deleteTask(id);
+    },
+)
+
+export const updateUserTaskStatus = createAppAsyncThunk('userTask/UpdateUserTask', 
+    async (userTask: UserTask) => {
+        return await updateTaskStatus(userTask);
     },
 )
 
@@ -71,7 +83,20 @@ const UserTaskSlice = createSlice({
                 state.error = action.error.message ?? "Unknown Error";
             })
             .addCase(postUserTask.fulfilled, (state, action) => {
+                state.status = "succeeded";
                 state.UserTasks.push(action.payload);
+            })
+            .addCase(deleteUserTask.fulfilled, (state, action) => {
+                state.status = "succeeded";
+                state.UserTasks = state.UserTasks.filter(task => task.Id !== action.payload);
+            })
+            .addCase(updateUserTaskStatus.fulfilled, (state, action) => {
+                state.status = "succeeded";
+                const updatedTaskIndex = state.UserTasks.findIndex(task => task.Id === action.payload.Id);
+
+                if(updatedTaskIndex === -1) return;
+
+                state.UserTasks[updatedTaskIndex] = action.payload;
             })
     }
 });

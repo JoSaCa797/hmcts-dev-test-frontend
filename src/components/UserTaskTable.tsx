@@ -12,7 +12,7 @@ const UserTaskTable = () => {
                 userTasks.status === "succeeded" ? (
                     userTasks.UserTasks.map((ut, index) => {
                         return (
-                            <p key={index}>{ut.Title}, {ut.Description}, {ut.Status}, {ut.Due}</p>
+                            <p key={index}>{ut.Title}, {ut.Description}, {ut.Status.toString()}, {ut.Due}</p>
                         )
                     })
                 ) : (
