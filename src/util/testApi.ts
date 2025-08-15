@@ -4,8 +4,8 @@ var uniqueId = 2;
 
 export const getTasks = async (): Promise<UserTask[]> => {
     
-    // await new Promise(resolve => setTimeout(resolve, 5000));
-    // console.log("Delayed for 5 seconds");
+    await new Promise(resolve => setTimeout(resolve, 5000));
+    console.log("Delayed for 5 seconds");
 
     return [
         {

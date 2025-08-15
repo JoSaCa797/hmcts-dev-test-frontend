@@ -119,7 +119,7 @@ const UserTaskSlice = createSlice({
             .addMatcher(
                 isAnyOf(fetchUserTasks.pending, fetchUserTask.pending),
                 (state) => {
-                    state.status = "idle"
+                    state.status = "pending"
                 }
             )
     }
