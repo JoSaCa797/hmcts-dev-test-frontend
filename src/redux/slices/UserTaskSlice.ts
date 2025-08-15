@@ -89,7 +89,7 @@ const UserTaskSlice = createSlice({
         builder
             .addCase(fetchUserTasks.fulfilled, (state, action) => {
                 state.status = "idle";
-                state.UserTasks.push(...action.payload);
+                state.UserTasks = [...action.payload];
             })
             .addCase(fetchUserTask.fulfilled, (state, action) => {
                 state.status = "idle";

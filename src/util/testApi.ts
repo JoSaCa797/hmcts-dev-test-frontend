@@ -1,9 +1,11 @@
 import type { NewUserTask, UserTask } from "../redux/slices/UserTaskSlice";
 
+var uniqueId = 2;
+
 export const getTasks = async (): Promise<UserTask[]> => {
     
-    await new Promise(resolve => setTimeout(resolve, 5000));
-    console.log("Delayed for 5 seconds");
+    // await new Promise(resolve => setTimeout(resolve, 5000));
+    // console.log("Delayed for 5 seconds");
 
     return [
         {
@@ -43,8 +45,10 @@ export const createTask = async (newUserTask: NewUserTask): Promise<UserTask> =>
     await new Promise(resolve => setTimeout(resolve, 5000));
     console.log("Delayed for 5 seconds");
 
+    uniqueId += 1;
+
     return {
-        Id: 2,
+        Id: uniqueId,
         ...newUserTask
     }
 
