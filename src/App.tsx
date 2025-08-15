@@ -1,5 +1,5 @@
 import UserTaskTable from "./components/UserTaskTable"
-import { deleteUserTask, fetchUserTasks, postUserTask, updateUserTaskStatus } from "./redux/slices/UserTaskSlice"
+import { deleteUserTask, fetchUserTask, fetchUserTasks, postUserTask, updateUserTaskStatus } from "./redux/slices/UserTaskSlice"
 import store from "./redux/store"
 
 function App() {
@@ -29,12 +29,17 @@ function App() {
         }));
     }
 
+    const handleGetTaskBtnClick = () => {
+        store.dispatch(fetchUserTask(1))
+    }
+
     return (
         <div className="w-screen h-screen bg-slate-500">
             <UserTaskTable />
-            <button onClick={handleCreateBtnClick}>Test create button</button>
-            <button onClick={handleDeleteBtnClick}>Test delete button</button>
-            <button onClick={handleUpdateBtnClick}>Test update button</button>
+            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={handleGetTaskBtnClick}>Test get button</button>
+            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={handleCreateBtnClick}>Test create button</button>
+            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={handleDeleteBtnClick}>Test delete button</button>
+            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={handleUpdateBtnClick}>Test update button</button>
         </div>
     )
 }

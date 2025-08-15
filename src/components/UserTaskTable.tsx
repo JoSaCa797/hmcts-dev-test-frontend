@@ -9,7 +9,7 @@ const UserTaskTable = () => {
     return (
         <div>
             {
-                userTasks.status === "succeeded" ? (
+                userTasks.status !== "pending" ? (
                     userTasks.UserTasks.map((ut, index) => {
                         return (
                             <p key={index}>{ut.Title}, {ut.Description}, {ut.Status.toString()}, {ut.Due}</p>

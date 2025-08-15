@@ -1,6 +1,6 @@
 import { createSlice, current } from "@reduxjs/toolkit";
 import { createAppAsyncThunk } from "../thunk";
-import { createTask, deleteTask, getTasks, updateTaskStatus } from "../../util/testApi";
+import { createTask, deleteTask, getTaskById, getTasks, updateTaskStatus } from "../../util/testApi";
 
 export interface UserTask {
     Id: number;
@@ -30,6 +30,22 @@ export const fetchUserTasks = createAppAsyncThunk('userTasks/FetchUserTasks',
     },
     {
         condition(arg, thunkApi) {
+            const userTaskStatus = thunkApi.getState().userTasks.status;
+            if(userTaskStatus !== 'idle'){
+                return false;
+            }
+        }
+    }
+)
+
+export const fetchUserTask = createAppAsyncThunk('userTasks/FetchUserTask', 
+    async (id: number) => {
+        const response = await getTaskById(id);
+        return response;
+    },
+    {
+        condition(arg, thunkApi) {
+            debugger;
             const userTaskStatus = thunkApi.getState().userTasks.status;
             if(userTaskStatus !== 'idle'){
                 return false;
@@ -75,27 +91,36 @@ const UserTaskSlice = createSlice({
                 state.status = "pending";
             })
             .addCase(fetchUserTasks.fulfilled, (state, action) => {
-                state.status = "succeeded";
+                state.status = "idle";
                 state.UserTasks.push(...action.payload);
             })
             .addCase(fetchUserTasks.rejected, (state, action) => {
                 state.status = "failed";
                 state.error = action.error.message ?? "Unknown Error";
             })
+            .addCase(fetchUserTask.pending, (state, action) => {
+                state.status = "pending";
+            })
+            .addCase(fetchUserTask.fulfilled, (state, action) => {
+                state.status = "idle";
+                state.UserTasks = [action.payload];
+            })
+            .addCase(fetchUserTask.rejected, (state, action) => {
+                state.status = "failed";
+                state.error = action.error.message ?? "Unknown Error";
+            })
             .addCase(postUserTask.fulfilled, (state, action) => {
-                state.status = "succeeded";
+                state.status = "idle";
                 state.UserTasks.push(action.payload);
             })
             .addCase(deleteUserTask.fulfilled, (state, action) => {
-                state.status = "succeeded";
+                state.status = "idle";
                 state.UserTasks = state.UserTasks.filter(task => task.Id !== action.payload);
             })
             .addCase(updateUserTaskStatus.fulfilled, (state, action) => {
-                state.status = "succeeded";
                 const updatedTaskIndex = state.UserTasks.findIndex(task => task.Id === action.payload.Id);
-
                 if(updatedTaskIndex === -1) return;
-
+                state.status = "idle";
                 state.UserTasks[updatedTaskIndex] = action.payload;
             })
     }
