@@ -11,16 +11,6 @@ function App() {
         store.dispatch(deleteUserTask(1));
     }
 
-    const handleUpdateBtnClick = () => {
-        store.dispatch(updateUserTaskStatus({
-            Id: 0,
-            Title: "Test1",
-            Description: "Test1",
-            Status: false,
-            Due: new Date().toString()
-        }));
-    }
-
     const handleGetTaskBtnClick = () => {
         store.dispatch(fetchUserTask(1))
     }
