@@ -26,15 +26,10 @@ function App() {
     }
 
     return (
-        <div className="w-screen h-screen bg-slate-300 p-10">
-            {/* <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={handleGetTaskBtnClick}>Test get button</button>
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={handleDeleteBtnClick}>Test delete button</button>
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={handleUpdateBtnClick}>Test update button</button> */}
-
+        <div className="w-screen min-h-screen bg-slate-300 p-10">
             <CreateTask />
 
             <UserTaskTable />
-
         </div>
     )
 }
