@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import store, { useAppDispatch } from '../redux/store';
+import { useAppDispatch } from '../redux/store';
 import { postUserTask } from '../redux/slices/UserTaskSlice';
 import Spinner from './Spinner';
 
@@ -54,9 +54,9 @@ const CreateTask = () => {
 
     return (
         <React.Fragment>
-            <form className='relative overflow-x-auto mb-4 p-2' onSubmit={handleFormSubmit}>
+            <form className='relative overflow-x-auto m-2 mb-4 p-2 w-64 border border-black' onSubmit={handleFormSubmit}>
                 
-                <div className='flex flex-col w-64'>
+                <div className='flex flex-col'>
                     <label>Title:</label>
                     <input 
                         type='text' 
@@ -68,7 +68,7 @@ const CreateTask = () => {
                     />
                 </div>
 
-                <div className="flex flex-col w-64">
+                <div className="flex flex-col">
                     <label>Description:</label>
                     <textarea
                         name="Description"
@@ -79,7 +79,7 @@ const CreateTask = () => {
                     />
                 </div>
 
-                <div className="flex flex-col w-64">
+                <div className="flex flex-col">
                     <label>Due:</label>
                     <input 
                         type='datetime-local' 
@@ -97,13 +97,16 @@ const CreateTask = () => {
                     value='Create task' 
                     disabled={!requestStatusFlag} 
                 />
-            </form>
 
-            {
-                !requestStatusFlag && (
-                    <Spinner />
-                )
-            }
+                {
+                    !requestStatusFlag && (
+                        <div className="absolute inset-0 bg-gray-300/75 flex items-center justify-center z-10">
+                            <Spinner />
+                        </div>
+                    )
+                }
+
+            </form>
         </React.Fragment>
     )
 }
