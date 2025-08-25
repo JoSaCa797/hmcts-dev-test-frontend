@@ -63,9 +63,13 @@ const UserTaskTable = () => {
                             userTasks.UserTasks.map((ut, index) => {
                                 return (
                                     <tr key={index} className='border-b-2'>
-                                        <td className='px-6 py-4 border-r-2'>{ut.Title}</td>
+                                        <td className='px-6 py-4 border-r-2'>
+                                            <div className="overflow-y-scroll scrollbar scrollbar-thumb-black scrollbar-track-gray-200 pr-2 max-h-[10rem]" style={{ scrollbarGutter: 'stable' }}>
+                                            {ut.Title}
+                                            </div>
+                                        </td>
                                         <td className='px-6 py-4 border-r-2 break-words'>
-                                            <div className="max-h-[10rem] overflow-y-auto break-words pr-2">
+                                            <div className="overflow-y-scroll scrollbar scrollbar-thumb-black scrollbar-track-gray-200 pr-2 max-h-[10rem]" style={{ scrollbarGutter: 'stable' }}>
                                                 {ut.Description}
                                             </div>
                                         </td>

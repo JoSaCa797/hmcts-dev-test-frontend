@@ -52,8 +52,6 @@ const CreateTask = () => {
 
     const requestStatusFlag: boolean = requestStatus === 'idle';
 
-    console.log(requestStatusFlag)
-
     return (
         <React.Fragment>
             <form className='relative overflow-x-auto mb-4 p-2' onSubmit={handleFormSubmit}>
